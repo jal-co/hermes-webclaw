@@ -1,3 +1,5 @@
+![hermes-webclaw](assets/banner.png)
+
 # hermes-webclaw
 
 Hermes Agent plugin that replaces the bundled Firecrawl plugin with native [WebClaw](https://webclaw.io) v1 API support.
