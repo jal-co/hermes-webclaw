@@ -26,17 +26,23 @@ Hermes Agent ships with a bundled Firecrawl plugin for `web_search`, `web_extrac
 
 This plugin replaces Firecrawl entirely. It registers as a `WebSearchProvider` so Hermes's built-in web tools route through WebClaw's native v1 API — faster responses, better extraction quality, and the full feature set.
 
-## Capabilities
+## Tools
 
-This plugin registers three capabilities with Hermes's web tool dispatcher:
+This plugin registers a `WebSearchProvider` (backing Hermes's built-in `web_search`, `web_extract`, `web_crawl`) **plus 9 dedicated tools** for the full WebClaw v1 API surface:
 
-| Hermes tool    | WebClaw endpoint | What it does                              |
-|----------------|------------------|-------------------------------------------|
-| `web_search`   | `/v1/search`     | Web search with optional result scraping  |
-| `web_extract`  | `/v1/scrape`     | Single-page content extraction            |
-| `web_crawl`    | `/v1/crawl`      | Async BFS site crawl with polling         |
+| Tool | Description |
+|---|---|
+| `webclaw_scrape` | Single URL extraction — CSS filtering, screenshots, browser actions, mobile UA, page Q&A, 9 output formats |
+| `webclaw_search` | Web search with optional parallel scraping of result URLs |
+| `webclaw_crawl` | Async BFS site crawl with depth/page limits, sitemap seeding, path filtering |
+| `webclaw_extract` | LLM-powered structured data extraction via JSON schema or natural language prompt |
+| `webclaw_summarize` | LLM-powered page summarization |
+| `webclaw_diff` | Content change tracking — compare current page against a previous JSON snapshot |
+| `webclaw_map` | Sitemap discovery — find all URLs on a site via sitemap.xml and robots.txt |
+| `webclaw_batch` | Multi-URL extraction in a single concurrent request |
+| `webclaw_brand` | Brand identity extraction — colors, fonts, logo, favicon |
 
-All three appear in the `hermes tools` picker under **Web Search & Extract** and work with the existing `web_search`, `web_extract`, and `web_crawl` tool calls your agent already uses.
+All tools appear in the `webclaw` toolset and can be enabled/disabled via `hermes tools`.
 
 ## Install
 

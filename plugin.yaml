@@ -1,10 +1,20 @@
 name: hermes-webclaw
 version: 1.0.0
-description: "WebClaw web search + content extraction + crawl. Drop-in Firecrawl replacement with native v1 API support. Requires WEBCLAW_API_KEY — sign up at https://webclaw.io."
+description: "WebClaw web search + extraction + crawl. Drop-in Firecrawl replacement with native v1 API — scrape, search, crawl, extract, summarize, diff, map, batch, brand. Requires WEBCLAW_API_KEY — sign up at https://webclaw.io."
 author: jal-co
 kind: backend
 provides_web_providers:
   - webclaw
+provides_tools:
+  - webclaw_scrape
+  - webclaw_search
+  - webclaw_crawl
+  - webclaw_extract
+  - webclaw_summarize
+  - webclaw_diff
+  - webclaw_map
+  - webclaw_batch
+  - webclaw_brand
 requires_env:
   - name: WEBCLAW_API_KEY
     description: "WebClaw API key (wc_...) — get one at https://webclaw.io"

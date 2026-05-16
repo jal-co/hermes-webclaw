@@ -29,14 +29,20 @@ impersonation — no headless browser required. 118ms average response time.
 ## What this plugin does
 
 Registers a `WebSearchProvider` subclass (`webclaw`) that Hermes's built-in
-`web_search`, `web_extract`, and `web_crawl` tools route through. Three
-capabilities:
+`web_search`, `web_extract`, and `web_crawl` tools route through, **plus 9
+dedicated tools** for the full WebClaw v1 API surface:
 
-| Hermes tool    | WebClaw endpoint | What it does                              |
-|----------------|------------------|-------------------------------------------|
-| `web_search`   | `/v1/search`     | Web search with optional result scraping  |
-| `web_extract`  | `/v1/scrape`     | Single-page content extraction            |
-| `web_crawl`    | `/v1/crawl`      | Async BFS site crawl with polling         |
+| Tool | WebClaw endpoint | What it does |
+|---|---|---|
+| `webclaw_scrape` | `/v1/scrape` | Single URL extraction — CSS filtering, screenshots, mobile UA, page Q&A |
+| `webclaw_search` | `/v1/search` | Web search with optional parallel scraping of result URLs |
+| `webclaw_crawl` | `/v1/crawl` | Async BFS site crawl with depth/page limits, sitemap seeding |
+| `webclaw_extract` | `/v1/extract` | LLM-powered structured data extraction via JSON schema or prompt |
+| `webclaw_summarize` | `/v1/summarize` | LLM-powered page summarization |
+| `webclaw_diff` | `/v1/diff` | Content change tracking against a previous snapshot |
+| `webclaw_map` | `/v1/map` | Sitemap discovery via sitemap.xml and robots.txt |
+| `webclaw_batch` | `/v1/batch` | Multi-URL extraction in a single concurrent request |
+| `webclaw_brand` | `/v1/brand` | Brand identity extraction — colors, fonts, logo, favicon |
 
 ## Install
 

@@ -25,6 +25,8 @@ mkdir -p "${PLUGIN_DIR}"
 cp "${SCRIPT_DIR}/plugin.yaml"  "${PLUGIN_DIR}/plugin.yaml"
 cp "${SCRIPT_DIR}/__init__.py"  "${PLUGIN_DIR}/__init__.py"
 cp "${SCRIPT_DIR}/provider.py"  "${PLUGIN_DIR}/provider.py"
+cp "${SCRIPT_DIR}/schemas.py"   "${PLUGIN_DIR}/schemas.py"
+cp "${SCRIPT_DIR}/tools.py"     "${PLUGIN_DIR}/tools.py"
 
 echo "✓ Plugin files installed"
 echo ""

@@ -1,16 +1,8 @@
-"""WebClaw web search + extract + crawl plugin for Hermes Agent.
+"""WebClaw plugin for Hermes Agent.
 
-Replaces the bundled Firecrawl plugin with native WebClaw v1 API support.
-Registers as a web search provider so Hermes's built-in web_search,
-web_extract, and web_crawl tools route through WebClaw.
-
-WebClaw is a fast, open-source web extraction toolkit built in Rust.
-It turns any website into clean markdown, JSON, plain text, or
-LLM-optimized output — without a headless browser.
-
-- Source: https://github.com/0xMassi/webclaw
-- Docs:   https://webclaw.io/docs
-- Cloud:  https://api.webclaw.io
+Registers:
+- WebClawWebSearchProvider — backs web_search, web_extract, web_crawl
+- 9 dedicated tools for the full WebClaw v1 API surface
 """
 
 from __future__ import annotations
@@ -20,34 +12,57 @@ import sys
 from pathlib import Path
 
 
-def _import_provider():
-    """Import the provider module from the same directory as this file.
+def _import_from_here(module_name: str, filename: str):
+    """Import a module from the same directory as this file.
 
     Works regardless of whether the plugin is installed as a bundled
     backend (plugins/web/webclaw/) or as a user plugin via
     ``hermes plugins install`` (~/.hermes/plugins/hermes-webclaw/).
     """
     plugin_dir = Path(__file__).resolve().parent
-    provider_path = plugin_dir / "provider.py"
+    filepath = plugin_dir / filename
 
-    # If already importable via the bundled path, use that
-    try:
-        from plugins.web.webclaw.provider import WebClawWebSearchProvider
-        return WebClawWebSearchProvider
-    except ImportError:
-        pass
-
-    # Otherwise load from the file directly (user-installed plugin)
     spec = importlib.util.spec_from_file_location(
-        "hermes_webclaw_provider", str(provider_path)
+        f"hermes_webclaw_{module_name}", str(filepath)
     )
     mod = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = mod
     spec.loader.exec_module(mod)
-    return mod.WebClawWebSearchProvider
+    return mod
 
 
 def register(ctx) -> None:
-    """Register the WebClaw provider with the plugin context."""
-    WebClawWebSearchProvider = _import_provider()
-    ctx.register_web_search_provider(WebClawWebSearchProvider())
+    """Register WebClaw web provider + all 9 tools."""
+
+    # Import provider, schemas, tools from the plugin directory
+    provider_mod = _import_from_here("provider", "provider.py")
+    schemas_mod = _import_from_here("schemas", "schemas.py")
+    tools_mod = _import_from_here("tools", "tools.py")
+
+    # 1. Register as the web search/extract/crawl provider
+    ctx.register_web_search_provider(
+        provider_mod.WebClawWebSearchProvider()
+    )
+
+    # 2. Register all 9 dedicated tools
+    _TOOLS = (
+        ("webclaw_scrape",    schemas_mod.WEBCLAW_SCRAPE,    tools_mod.handle_scrape,    "🌐"),
+        ("webclaw_search",    schemas_mod.WEBCLAW_SEARCH,    tools_mod.handle_search,    "🔎"),
+        ("webclaw_crawl",     schemas_mod.WEBCLAW_CRAWL,     tools_mod.handle_crawl,     "🕷️"),
+        ("webclaw_extract",   schemas_mod.WEBCLAW_EXTRACT,   tools_mod.handle_extract,   "📊"),
+        ("webclaw_summarize", schemas_mod.WEBCLAW_SUMMARIZE, tools_mod.handle_summarize, "📝"),
+        ("webclaw_diff",      schemas_mod.WEBCLAW_DIFF,      tools_mod.handle_diff,      "📋"),
+        ("webclaw_map",       schemas_mod.WEBCLAW_MAP,       tools_mod.handle_map,       "🗺️"),
+        ("webclaw_batch",     schemas_mod.WEBCLAW_BATCH,     tools_mod.handle_batch,     "📦"),
+        ("webclaw_brand",     schemas_mod.WEBCLAW_BRAND,     tools_mod.handle_brand,     "🎨"),
+    )
+
+    for name, schema, handler, emoji in _TOOLS:
+        ctx.register_tool(
+            name=name,
+            toolset="webclaw",
+            schema=schema,
+            handler=handler,
+            check_fn=tools_mod._check_webclaw_available,
+            emoji=emoji,
+        )
