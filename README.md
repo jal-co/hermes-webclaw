@@ -44,9 +44,27 @@ All three appear in the `hermes tools` picker under **Web Search & Extract** and
 
 Sign up at [webclaw.io](https://webclaw.io) and create an API key from the dashboard. Keys are prefixed with `wc_`.
 
-### 2. Copy plugin files to Hermes
+### 2. Install the plugin
 
-Run the install script on the Hermes host:
+**Option A: `hermes plugins install`** (recommended)
+
+```bash
+hermes plugins install jal-co/hermes-webclaw --enable
+```
+
+This clones the repo, prompts for `WEBCLAW_API_KEY`, and enables the plugin. It appears in the `hermes tools` picker under **Web Search & Extract**.
+
+**Option B: Download a release tarball**
+
+```bash
+curl -fsSL https://github.com/jal-co/hermes-webclaw/releases/latest/download/hermes-webclaw-1.0.0.tar.gz | tar xz
+cd hermes-webclaw-1.0.0
+bash install.sh
+```
+
+Or download a specific version from the [releases page](https://github.com/jal-co/hermes-webclaw/releases).
+
+**Option C: Clone and install manually**
 
 ```bash
 git clone https://github.com/jal-co/hermes-webclaw.git
@@ -54,14 +72,14 @@ cd hermes-webclaw
 bash scripts/install.sh
 ```
 
-Or manually:
+**Option D: Direct copy into bundled plugins**
 
 ```bash
 PLUGIN_DIR=/usr/local/lib/hermes-agent/plugins/web/webclaw
 mkdir -p "$PLUGIN_DIR"
-cp scripts/plugin.yaml  "$PLUGIN_DIR/plugin.yaml"
-cp scripts/__init__.py   "$PLUGIN_DIR/__init__.py"
-cp scripts/provider.py   "$PLUGIN_DIR/provider.py"
+cp plugin.yaml  "$PLUGIN_DIR/plugin.yaml"
+cp __init__.py   "$PLUGIN_DIR/__init__.py"
+cp provider.py   "$PLUGIN_DIR/provider.py"
 ```
 
 ### 3. Set the API key
