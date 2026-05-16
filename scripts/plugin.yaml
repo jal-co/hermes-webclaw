@@ -1,0 +1,7 @@
+name: web-webclaw
+version: 1.0.0
+description: "WebClaw web search + content extraction + crawl. Drop-in Firecrawl replacement with native v1 API support — scrape, search, crawl, extract, summarize, diff, map, batch, brand. Requires WEBCLAW_API_KEY — sign up at https://webclaw.io."
+author: jal-co
+kind: backend
+provides_web_providers:
+  - webclaw
